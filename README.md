@@ -10,7 +10,7 @@ Proposed methodology/ resources, etc:  Training an AutoEncoder on the training s
  
 Data set: The project can either be done collecting categorized MIDI files, or process music videos from youtube as training data.
  
-Project title: Wine Recommender
+Project title: Wine Recommender  - APPROVED
  
 Project description: Sometimes when people find a type of wine they enjoy, they are likely to try similar types of wine.
 With this project, the user will be able to input a group of wines he/she like, and set filters for attributes such as price, region, or varietal. The model then recommends new wines to the user that it thinks he/she would like. Similarity will be calculated based on attributes such as varietal, region, previous user’s reviews, and keywords from the wine’s description.
