@@ -17,15 +17,7 @@ With this project, the user will be able to input a group of wines he/she like, 
  
 Proposed methodology/ resources, etc: We’ll be using sentiment analysis to determine the similarity between each wine’s description and factor that into the overall similarity of each wine. Then a classifier is used to match the description of the user input and then return the types of wine that matches the input.
  
-Data set: https://www.kaggle.com/zynicide/wine-reviewss 
- 
-Project title: Kickstarter Success Predictor
- 
-Project description: Not all projects are fully funded on kickstarter, so when backing a project, there are risks that the project will never be funded or completed. We also don’t want to wait until the very end to back a project because there are limited early bird incentives offered. To obtain the best value when backing a campaign while decreasing the chance of losing money, we want to create a model that can accurately predict the likelihood of a campaign’s success. Additionally, when a project is started on kickstarter, the organizer is also eager to know whether the project is going to be a success or not. The model takes previous kickstarter campaign data and predicts whether a given current kickstarter project will successfully be funded. 
- 
-Proposed methodology/ resources, etc: We can apply sentiment analysis on the description of the project, then we can train a SVM on the training dataset based on attributes such as positive words, project type, etc . Given the user project input, we can determine the probability of it being successful or not.
- 
-Data set: https://www.kaggle.com/kemical/kickstarter-projects
+Data set: fetched from https://www.vivino.com/
  
  
 
