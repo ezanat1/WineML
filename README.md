@@ -34,8 +34,12 @@ source venv/bin/activate
 ## Install dependencies
 
 pip3 install flask
+
 pip3 install Flask-Materialize
+
 pip3 install flask_wtf
+
+pip3 install flask_sqlalchemy
 
 
 python3 run.py
