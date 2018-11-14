@@ -1,0 +1,19 @@
+{% extends "material/base.html" %}
+{% import "material/wtf.html" as wtf %}
+{% block title %}
+Welcome
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Whats Your Taste</h1>
+    <div class="row">
+        <form method="POST" action="/">
+            {{ wtf.quick_form(form)}}
+        
+        </form>
+    </div>
+</div>
+
+{% endblock %}

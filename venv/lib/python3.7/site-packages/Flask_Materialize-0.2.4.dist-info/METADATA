@@ -1,0 +1,38 @@
+Metadata-Version: 2.1
+Name: Flask-Materialize
+Version: 0.2.4
+Summary: An extension that includes Materialize CSS (http://materializecss.com/) in your project, without any boilerplate code.
+Home-page: https://bitbucket.org/cyberspy/flask_materialize
+Author: Adam Cadman
+Author-email: cyberspy.oss@gmx.com
+License: MIT
+Keywords: flask materialize materializecss material design css html layout bootstrap responsive widgets wtforms templates
+Platform: any
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Framework :: Flask
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Software Development :: User Interfaces
+Requires-Dist: Flask (>=0.12)
+Requires-Dist: Jinja2 (>=2.0)
+
+===============
+Flask-Material
+===============
+
+Flask-Material packages `MaterializeCSS` <https://github.com/Dogfalo/materialize> into an extension that mostly consists
+of a blueprint named 'material'. It can also create links to serve Materialize
+from a CDN and works with no boilerplate code in your application.
+
+
+Please see: `https://bitbucket.org/cyberspy/flask_materialize/overview
+<https://bitbucket.org/cyberspy/flask_materialize/overview>`_ for additional documentation.
+
+
