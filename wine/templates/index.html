@@ -1,10 +1,21 @@
 {% extends "material/base.html" %}
 {% import "material/wtf.html" as wtf %}
-{% block title %}
-Welcome
-{% endblock %}
 
+    {% block title %}
+    Welcome
+    {% endblock %}
+    <link rel="stylesheet"  href="/static/css/style.css">
+    
 {% block content %}
+<nav>
+        <div class="nav-wrapper teal">
+          <a href="#!" class="brand-logo">Logo</a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="{{url_for('login') }}"><i class="material-icons left">account_box</i>Login </a></li>
+            <li><a href="{{url_for('register') }}"><i class="material-icons right"> account_circle </i>Sign up</a></li>
+          </ul>
+        </div>
+      </nav>
 
 <div class="container">
     <h1>Whats Your Taste</h1>
