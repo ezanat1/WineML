@@ -45,7 +45,7 @@ with open('test.csv', 'a') as csvfile:
   derpwriter = csv.writer(csvfile)
   derpwriter.writerow(['wine_id','avg_rating','price','varietal','vineyard','region','comm_id','comm_rating','comm_note'])
 
-  for i in range(1213337, 1400000):
+  for i in range(1339839, 1400000):
     try:
       print(i)
       time.sleep(1)
