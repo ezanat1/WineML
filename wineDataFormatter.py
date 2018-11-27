@@ -1,31 +1,64 @@
 import csv
+import datetime
+import hashlib
 import math
-
+import os
+import pickle
 import numpy
 from textblob import TextBlob
 
 # wine id --> comments -> vector --ML--> wine id
 class wineClassifier:
+    # dict to put serialized file
+    storage = {}
     wines = {}
+    distance_grid = {}
     # input file
-    file = "test_part1.csv"
+    storage_file = "storage.pkl"  # location for the stored data
+    input_file = "test_part1.csv"  # raw data file
 
-    def normalize(self, score, low, high):
+    def normalize(self, score, low, high): #  possible function to scale sentiment
         return  (float(score)-low)/(high-low)
 
-    def sigmoid(self, x):
+    def sigmoid(self, x): # possible function to scale sentiment
       return 1 / (1 + math.exp(-x))
 
     def __init__(self):
+        # load pickled file
+        if os.path.isfile(self.storage_file):
+            self.storage = pickle.load(open(self.storage_file, "rb"))
+            self.wines = self.storage["wines"]
+            self.distance_grid = self.storage["distance_grid"]
+
+
+        # check if the file is different
+        sha1 = hashlib.sha1()
+        with open(self.input_file, 'rb') as f:
+            while True:
+                data = f.read(65536)
+                if not data:
+                    break
+                sha1.update(data)
+        input_hash = sha1.hexdigest()
+
+        # input file is same as last time, stop init
+        if self.storage.get("hash") and input_hash == self.storage["hash"]:
+            print("same input file as last run")
+            return
+
         # read from scrapped data into wines list
-        with open(self.file, "r" , encoding='utf-8') as csvfile:
+        with open(self.input_file, "r" , encoding='utf-8') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='"')
             for row in spamreader:
-                if row[0] == "wine_id":
+                if row[0] == "wine_id":  # skip top row
                     continue
                 wine_id = row[0]
-                avg_rating = row[1]
-                price = row[2]
+
+                if self.wines.get(wine_id):  # key exists in file, skip
+                    continue
+
+                avg_rating = float(row[1])
+                price = float(row[2])
                 variance = row[3]
                 vineyard = row[4]
                 region = row[5]
@@ -34,30 +67,89 @@ class wineClassifier:
                 # print(comments)
                 comment_score = 0
                 comment_count = 0
+                # parse each comment
                 for comment in comments:
+                    # sentiment analysis
                     test = TextBlob(comment)
                     comment_score += test.sentiment.polarity
                     comment_count += 1
                 avg_sentiment = comment_score / comment_count
-                self.wines[wine_id] = (float(price), float(avg_rating), float(avg_sentiment))
 
-    # sorts the list of wine
-    def sortClosest(self, wineID):
-        recommendationList = {}
-        current_wine = numpy.array(self.wines[wineID])
-        for id, values in self.wines.items():
-            if id == wineID:  # skip the current one
-                continue
-            test_wine = numpy.array(values)
-            difference = numpy.linalg.norm(current_wine - test_wine)
-            recommendationList[id] = difference
-        return  sorted(recommendationList, key=recommendationList.get)
+                self.wines[wine_id] = {}
+                self.wines[wine_id]["rating"] = avg_rating
+                self.wines[wine_id]["price"] = price
+                self.wines[wine_id]["sentiment"] = self.normalize(avg_sentiment, -1, 1)
+                self.wines[wine_id]["variance"] = variance
+                self.wines[wine_id]["vineyard"] = vineyard
+                self.wines[wine_id]["region"] = region
+
+            #  store evaluated data in file
+            self.generateDistanceGrid()
+            self.storage["wines"] = self.wines
+            self.storage["distance_grid"] = self.distance_grid
+            self.storage["hash"] = input_hash
+            pickle.dump(self.storage, open(self.storage_file, 'wb'))
+
+    """
+            this function generates a dict of dict that sorts all the wine based on its similarity to the current one
+             eg self.distance_grid[1][2] give the relative distance between wine 1 and wine 2
+    """
+    def generateDistanceGrid(self):
+        for wine_id, values in self.wines.items():
+            for test_id, test_values in self.wines.items():
+                if test_id == wine_id:  # skip the current one
+                    continue
+
+                if not self.distance_grid.get(wine_id):  # if new wine is loaded
+                    self.distance_grid[wine_id] = {}
+                if not self.distance_grid.get(test_id):  # fill in the opposite side of the matrix
+                    self.distance_grid[test_id] = {}
+                if self.distance_grid[wine_id].get(test_id): # skip if result exists
+                    continue
+
+                difference = self.getWineDifference(wine_id, test_id)
+                self.distance_grid[wine_id][test_id] = difference
+                self.distance_grid[test_id][wine_id] = difference
+
+    """
+      measure the difference between two wines by calcuating the norm, conditions can be changed to match under other 
+      conditions
+    """
+    def getWineDifference(self, a_id, b_id):
+        if a_id == b_id:
+            return 0
+        wine_a = self.getWineInfo(a_id)
+        wine_b = self.getWineInfo(b_id)
+        # find the difference in other factors
+        d_variance = 0
+        d_vineyard = 0
+        d_region = 0
+        if not wine_a["variance"] == wine_b["variance"]:
+            d_variance = 1
+        if not wine_a["region"] == wine_b["region"]:
+            d_region = 1
+        if not wine_a["vineyard"] == wine_b["vineyard"]:
+            d_vineyard = 1
+
+        a_array = numpy.array((wine_a["price"],wine_a["rating"],wine_a["sentiment"], 0, 0, 0))
+        b_array = numpy.array((wine_b["price"],wine_b["rating"],wine_b["sentiment"],d_variance,d_vineyard,d_region))
+        return numpy.linalg.norm(a_array - b_array)
+
+    def getClosestMatch(self, wineID):
+        return sorted(self.distance_grid[wineID], key=self.distance_grid[wineID].get)
+
+    def getWineInfo(self, wineID):
+        return self.wines.get(wineID)
 
 
-
-
+time = datetime.datetime.now()
 a = wineClassifier()
-print(a.sortClosest("90577"))
+diff = datetime.datetime.now() - time
+print("init time:", diff)
+time = datetime.datetime.now()
+print("Wine A:",a.getWineInfo("90577"))
+print("Wine that is similar:",a.getWineInfo(a.getClosestMatch("90577")[0]))
+diff = datetime.datetime.now() - time
+print("query time:", diff)
 
-        
 
