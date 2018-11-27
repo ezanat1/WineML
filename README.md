@@ -39,10 +39,15 @@ python3 run.py
 
 ## Install dependencies in wine blog
 pip install flask
+
 pip install flask_sqlalchemy
+
 pip install flask_wtf
+
 pip install bcrypt
+
 pip install flask_login
+
 pip install Pillow
 
  
