@@ -23,6 +23,9 @@ After init virtual environment --> activate virtual environment
 
 source venv/bin/activate
 
+python3 run.py
+
+
 ## Install dependencies
 
 pip3 install flask
@@ -32,9 +35,6 @@ pip3 install Flask-Materialize
 pip3 install flask_wtf
 
 pip3 install flask_sqlalchemy
-
-
-python3 run.py
 
 
 ## Install dependencies in wine blog
