@@ -4,12 +4,16 @@
 Recommendations
 {% endblock %}
 
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"href="{{url_for('static', filename='style.css')}}">
+{% endblock %}
 {% block content %}
 <div class="container">
-    <h1>Our Recommendations</h1>
+    <h1 class="center-align">Our Recommendations</h1>
     <br>
 <div class="row">
-        {% for w in wines %}
+        {% for w in newList %}
         <div class="col s6 m4">
           <div class="card">
             <div class="card-image">
@@ -17,12 +21,13 @@ Recommendations
               <a class="btn-floating halfway-fab waves-effect waves-light teal"><i class="material-icons">add</i></a>
             </div>
             <div class="card-content">
-              <span class="card-title">{{ w.winename }}</span>
-              <p>Always look for the black rooster on the top. These are the old producers on Chianti. Earthy nose. Bright cherry and burnt ash in flavor.</p>
+              <span class="card-title">{{ w['vineyard'] }}</span>
+              <p>{{ w['region'] }}</p>
+              <p>{{ w['price'] }}</p>
             </div>
           </div>
         </div>
-      {% endfor %}
+        {% endfor %}
     </div>
     
 {% endblock %}

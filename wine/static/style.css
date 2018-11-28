@@ -1,0 +1,11 @@
+html { 
+    background: url('/static/bottles-dolls-holding-713642.jpg') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+h1{
+  color:white;
+  font-family: cursive;
+}

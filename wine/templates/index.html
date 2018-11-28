@@ -1,13 +1,17 @@
 {% extends "material/base.html" %}
 {% import "material/wtf.html" as wtf %}
 
-    {% block title %}
-    Welcome
+{% block title %}
+Welcome
+{% endblock %}
+
+    {% block styles %}
+    {{super()}}
+    <link rel="stylesheet"href="{{url_for('static', filename='main.css')}}">
     {% endblock %}
-    <link rel="stylesheet"  href="/static/css/style.css">
-    
+
 {% block content %}
-<nav>
+<!-- <nav>
         <div class="nav-wrapper teal">
           <a href="#!" class="brand-logo">Logo</a>
           <ul class="right hide-on-med-and-down">
@@ -15,15 +19,23 @@
             <li><a href="{{url_for('register') }}"><i class="material-icons right"> account_circle </i>Sign up</a></li>
           </ul>
         </div>
-      </nav>
-
+      </nav> -->
+ 
 <div class="container">
-    <h1>Whats Your Taste</h1>
+    <div class="butons right-align ">
+        <a href="{{ url_for('login') }}" class="btn-floating pulse"><i class="material-icons">account_box</i></a>
+        <a href="{{url_for('register') }}" class="btn-floating  pulse"><i class="material-icons">cloud</i></a>
+    </div>
+    <div class="content">
+
+    
+    <h1 class="center-align ">Whats Your Taste</h1>
     <div class="row">
-        <form method="POST" action="/">
+        <form method="POST" action="/" class="col s12 mtForms">
             {{ wtf.quick_form(form)}}
         
         </form>
+    </div>
     </div>
 </div>
 
