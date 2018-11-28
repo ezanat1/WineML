@@ -1,4 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
   <h1>About Page</h1>
+  <p> Sometimes when people find a type of wine they enjoy, they are likely to try similar types of wine.
+    With this project, the user will be able to input a group of wines he/she like, and set filters for attributes such as price, region, or varietal.
+    The model then recommends new wines to the user that it thinks he/she would like.
+     Similarity will be calculated based on attributes such as varietal, region, previous user’s reviews, and keywords from the wine’s description.</p>
+  <p> We’ll be using sentiment analysis to determine the similarity between each wine’s description and factor that into the overall similarity of each wine.
+    Then a classifier is used to match the description of the user input and then return the types of wine that matches the input.</p>
+
 {% endblock content %}
