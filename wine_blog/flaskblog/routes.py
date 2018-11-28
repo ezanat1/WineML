@@ -3,8 +3,8 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from flaskblog import app, db, bcrypt
-from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
-from flaskblog.models import User, Post
+from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, RecommendWineForm
+from flaskblog.models import User, Post, Wine
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -17,6 +17,15 @@ def home():
 @app.route("/about")
 def about():
     return render_template('about.html', title='About')
+
+@app.route("/recommend", methods=['GET','POST'])
+def recommend():
+    form = RecommendWineForm()
+    if form.validate_on_submit():
+        wines = Wine.query.all()
+        return redirect(url_for('recommended_wines'))
+    return render_template('recommend.html', title='Recommend', form=form)
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():

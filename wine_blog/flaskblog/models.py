@@ -27,6 +27,13 @@ class Post(db.Model):
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
 
+class Wine(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    wine_name = db.Column(db.String(30),nullable=False)
+
+    def __repr__(self):
+        return f"Wine('{self.wine_name}')"
+
 posts = [
     {
         'author': 'Corey Schafer',
