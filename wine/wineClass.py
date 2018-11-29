@@ -145,8 +145,10 @@ class wineClassifier:
                 wineID = key
                 break
         return wineID
-    def getClosestMatch(self, wineName):
+    def getClosestMatch(self, wineName): 
         wineID = self.getWineID(wineName)
+        if wineID == 0:
+            return []
         return sorted(self.distance_grid[wineID], key=self.distance_grid[wineID].get)
 
     def getWineInfo(self, wineiD):

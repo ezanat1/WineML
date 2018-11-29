@@ -1,0 +1,38 @@
+{% extends "material/base.html" %}
+{% import "material/wtf.html" as wtf %}
+{% block title %}
+Account
+{% endblock %}
+
+<!-- {% block styles %}
+{{super()}}
+<link rel="stylesheet"href="{{url_for('static', filename='style.css')}}">
+{% endblock %} -->
+{% block content %}
+<div class="container">
+    <form>
+        <div class="input-field">
+            <input id="search" type="search" required>
+            <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+            <i class="material-icons">close</i>
+        </div>
+          </form>
+</div>
+   
+
+<div class="container">
+    <div class="row">
+        <div class="col right-align">
+            <div class="">
+                <h2 class="center-align"> My Wines </h2>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+    
+{% endblock %}

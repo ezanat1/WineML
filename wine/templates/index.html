@@ -10,33 +10,43 @@ Welcome
     <link rel="stylesheet"href="{{url_for('static', filename='main.css')}}">
     {% endblock %}
 
-{% block content %}
-<!-- <nav>
-        <div class="nav-wrapper teal">
-          <a href="#!" class="brand-logo">Logo</a>
-          <ul class="right hide-on-med-and-down">
-            <li><a href="{{url_for('login') }}"><i class="material-icons left">account_box</i>Login </a></li>
-            <li><a href="{{url_for('register') }}"><i class="material-icons right"> account_circle </i>Sign up</a></li>
-          </ul>
-        </div>
-      </nav> -->
- 
-<div class="container">
-    <div class="butons right-align ">
-        <a href="{{ url_for('login') }}" class="btn-floating pulse"><i class="material-icons">account_box</i></a>
-        <a href="{{url_for('register') }}" class="btn-floating  pulse"><i class="material-icons">cloud</i></a>
-    </div>
-    <div class="content">
+    {% block scripts %}
+    {{super()}}
+    <script src="{{url_for('static', filename='new.js')}}"></script>
+    {% endblock %}
 
-    
-    <h1 class="center-align ">Whats Your Taste</h1>
-    <div class="row">
-        <form method="POST" action="/" class="col s12 mtForms">
-            {{ wtf.quick_form(form)}}
-        
-        </form>
-    </div>
+{% block content %}
+ <div class="outter">
+    <div class="container">
+        <div class="butons right-align ">
+            <a href="{{ url_for('login') }}" class="btn-floating pulse"><i class="material-icons">account_box</i></a>
+            <a href="{{url_for('register') }}" class="btn-floating  pulse"><i class="material-icons">person_add</i></a>
+        </div>
+        <div class="content">
+            <h1 class="center-align ">Whats Your Taste</h1>
+        <div class="row">
+            <form method="POST" action="/" class=" mtForms col s12">
+                {{ wtf.quick_form(form)}}
+            
+            </form>
+        </div>
+        </div>
     </div>
 </div>
 
+<div class="container">
+    <div class="center-align">
+        <h1>About us</h1>
+        <div class="row">
+            <div class="col m6">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, voluptatum sed corrupti quia blanditiis accusantium, enim ex quibusdam eum illo possimus neque cumque vel nostrum illum magnam praesentium, quas voluptas?</p>
+            </div>
+            <div class="col m6">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, voluptatum sed corrupti quia blanditiis accusantium, enim ex quibusdam eum illo possimus neque cumque vel nostrum illum magnam praesentium, quas voluptas?</p>
+                </div>
+
+        </div>
+    </div>
+
+</div>
 {% endblock %}
