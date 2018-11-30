@@ -23,11 +23,11 @@ Welcome
             <a href="{{url_for('register') }}" class="btn-floating  pulse"><i class="material-icons">person_add</i></a>
         </div>
         <div class="content">
-            <h1 class="center-align ">Whats Your Taste</h1>
+            <h1 class="center-align ">Whats Your Taste?</h1>
         <div class="row">
             <form method="POST" action="/" class=" mtForms col s12">
                 {{ wtf.quick_form(form)}}
-            
+
             </form>
         </div>
         </div>
@@ -36,10 +36,19 @@ Welcome
 
 <div class="container">
     <div class="center-align">
-        <h1>About us</h1>
+        <h1>Top Wines</h1>
         <div class="row">
-            <div class="col m6">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, voluptatum sed corrupti quia blanditiis accusantium, enim ex quibusdam eum illo possimus neque cumque vel nostrum illum magnam praesentium, quas voluptas?</p>
+            <div class="col m3">
+                    <div class="card">
+                            <div class="card-image">
+                              <!-- <a href="{{ url_for('login') }}" class="btn-floating halfway-fab waves-effect waves-light teal"><i class="material-icons">add</i></a> -->
+                            </div>
+                            <div class="card-content">
+                              <span class="card-title">blah blah</span>
+                              <p><i class="material-icons">location_on</i> SF</p>
+                              <p> <i class="material-icons">attach_money</i> 20.00</p>
+                            </div>
+                          </div>
             </div>
             <div class="col m6">
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, voluptatum sed corrupti quia blanditiis accusantium, enim ex quibusdam eum illo possimus neque cumque vel nostrum illum magnam praesentium, quas voluptas?</p>

@@ -1,0 +1,83 @@
+{% extends "material/base.html" %}
+{% import "material/wtf.html" as wtf %}
+{% block title %}
+272 Wines-account/{{ name }}
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"href="{{url_for('static', filename='dashboard.css')}}">
+{% endblock %}
+{% block content %}
+<nav class="white">
+        <div class="nav-wrapper">
+          <a href="{{ url_for('dashboard' )}}" class="brand-logo red-text">272 Wines</a>
+            <ul class="hide-on-med-and-down right">
+                <li>
+                   <div class="center row">
+                      <div class="col s12 " >
+                        <div class="row" id="topbarsearch">
+                          <div class="input-field col s6 s12 red-text">
+                              <a href="{{ url_for('index' )}}">
+                            <i class="red-text material-icons prefix">search</i>
+                            <input type="text" placeholder="search" id="autocomplete-input" class="autocomplete red-text" >
+                        </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </li>
+                <li><a href="sass.html" class="red-text">Sass</a></li>
+                <li><a href="badges.html" class="red-text">My Account</a></li>
+                <li><a href="{{ url_for('logout') }}" class="red-text">Logout</a></li>
+            </ul>
+        </div>
+      </nav>
+</div>
+
+
+<div class="container">
+    <h1 class="center-align"> My Wines </h1>
+    <div class="padd">
+
+
+    <div class="row">
+            <ul class="collection">
+                    <li class="collection-item avatar">
+                      <img src="images/yuna.jpg" alt="" class="circle">
+                      <span class="title">Title</span>
+                      <p>First Line <br>
+                         Second Line
+                      </p>
+                      <a href="#!" class="secondary-content"><i class="material-icons">delete</i></a>
+                    </li>
+                    <li class="collection-item avatar">
+                      <i class="material-icons circle">wine</i>
+                      <span class="title">Title</span>
+                      <p>First Line <br>
+                         Second Line
+                      </p>
+                      <a href="#!" class="secondary-content"><i class="material-icons">delete</i></a>
+                    </li>
+                    <li class="collection-item avatar">
+                      <i class="material-icons circle green">wine</i>
+                      <span class="title">Title</span>
+                      <p>First Line <br>
+                         Second Line
+                      </p>
+                      <a href="#!" class="secondary-content"><i class="material-icons">delete</i></a>
+                    </li>
+                    <li class="collection-item avatar">
+                      <i class="material-icons circle red">wine</i>
+                      <span class="title">Title</span>
+                      <p>First Line <br>
+                         Second Line
+                      </p>
+                      <a href="#!" class="secondary-content"><i class="material-icons">delete</i></a>
+                    </li>
+                  </ul>
+                </div>
+            </div>
+</div>
+
+{% endblock %}

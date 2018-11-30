@@ -1,17 +1,27 @@
 {% extends "material/base.html" %}
 {% import "material/wtf.html" as wtf %}
+    {% block title %}
+    Login
+    {% endblock %}
 
+    {% block styles %}
+    {{super()}}
+    <link rel="stylesheet"href="{{url_for('static', filename='main.css')}}">
+    {% endblock %}
 
 {% block content %}
     <div class="container">
         <h1>Log-In</h1>
         <div class="row">
             <form method="POST" action="/login">
-                {{ wtf.quick_form(form)}}  
+                {{ wtf.quick_form(form)}}
                 </form>
             </div>
     </div>
+<div class="container">
+    <h6>Dont have an account yet?<a href="{{ url_for('register') }}">Register Here </a></h6>
 
+</div>
 
 
 {% endblock %}

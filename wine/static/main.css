@@ -4,7 +4,7 @@ body,html{
 .outter{
     background-image: url('/static/img/pexels-photo.jpg') ;
     /* Full height */
-    height: 100%; 
+    height: 100%;
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
@@ -16,12 +16,13 @@ body,html{
     padding-top: 50px;
 }
 .content h1{
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    color: white;
-    font-size: 60px;
+    font-family: futura;
+    color: black;
+    font-size: 80px;
 }
+
 .butons{
-    padding-top: 100px;
+    padding-top: 80px;
 
 }.input-field{
     color: white;
