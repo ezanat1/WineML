@@ -7,6 +7,7 @@ Welcome
 
     {% block styles %}
     {{super()}}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet"href="{{url_for('static', filename='main.css')}}">
     {% endblock %}
 
@@ -27,22 +28,21 @@ Welcome
         <div class="row">
             <form method="POST" action="/" class=" mtForms col s12">
                 {{ wtf.quick_form(form)}}
-
             </form>
         </div>
         </div>
     </div>
 </div>
 
-<div class="container">
+<!-- <div class="container">
     <div class="center-align">
         <h1>Top Wines</h1>
         <div class="row">
             <div class="col m3">
                     <div class="card">
                             <div class="card-image">
-                              <!-- <a href="{{ url_for('login') }}" class="btn-floating halfway-fab waves-effect waves-light teal"><i class="material-icons">add</i></a> -->
-                            </div>
+                              <-- <a href="{{ url_for('login') }}" class="btn-floating halfway-fab waves-effect waves-light teal"><i class="material-icons">add</i></a> -->
+<!--                             </div>
                             <div class="card-content">
                               <span class="card-title">blah blah</span>
                               <p><i class="material-icons">location_on</i> SF</p>
@@ -53,9 +53,8 @@ Welcome
             <div class="col m6">
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, voluptatum sed corrupti quia blanditiis accusantium, enim ex quibusdam eum illo possimus neque cumque vel nostrum illum magnam praesentium, quas voluptas?</p>
                 </div>
-
         </div>
     </div>
 
-</div>
+</div> -->
 {% endblock %}

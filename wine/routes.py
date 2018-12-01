@@ -10,6 +10,7 @@ from wine.models import User
 from wine.wineClass import wineClassifier
 from flask_login import LoginManager,UserMixin,login_user,login_required,logout_user,current_user
 from werkzeug.security import generate_password_hash,check_password_hash
+import json
 
 login_manager=LoginManager()
 login_manager.init_app (app)
@@ -39,20 +40,18 @@ class registerForm(FlaskForm):
 def index():
     form=wineForm(request.form)
     if request.method == 'POST' and form.validate_on_submit():
-        # wines=wine.query.all()
         user_input = form.name.data
         wineInfo=a.getWineInfo(user_input)
-        # similar=a.getWineInfo(a.getClosestMatch(user_input)[0])
-        # print(similar[:10])
-        similar=a.getClosestMatch(user_input)[:10]
-        API_KEY='e34875d11fcaa37dc08ce32849965d22ecde47852672a7f8706b43a7086485ac'
-        r=requests.get('https://api.unsplash.com/photos/?client_id='+ API_KEY)
+        similar=a.getClosestMatch(user_input)[:9]
         if not similar:
             flash(' Wine Not found ')
         else:
             newList=[]
             for id in similar:
                 info=a.getWineInfo(id)
+                r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
+                pic_url = r['wine_page_information']['vintage']['image']['location']
+                info['url']="https:"+str(pic_url)
                 newList.append(info)
             return render_template('rec.html',newList=newList,user_input=user_input)
     return render_template('index.html',form=form)

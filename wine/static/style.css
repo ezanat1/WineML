@@ -1,5 +1,5 @@
 html {
-    background: url('/static/bottles-dolls-holding-713642.jpg') no-repeat center center fixed;
+    background: url('/static/woodbackground.jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -7,11 +7,12 @@ html {
   }
 h1{
   color:white;
-  font-family: cursive;
+  font-family: futura;
+  font-size: 70px;
 }
 h4{
-  color: white;
-  font-family: cursive;
+  color:white;
+  font-family: futura;
   font-size: 30px;
 }
 /* .card{

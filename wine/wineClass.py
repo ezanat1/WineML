@@ -133,9 +133,9 @@ class wineClassifier:
         if not wine_a["vineyard"] == wine_b["vineyard"]:
             d_vineyard = 1
 
-        a_array = numpy.array((wine_a["price"],wine_a["rating"],wine_a["sentiment"], 0, 0, 0))
-        b_array = numpy.array((wine_b["price"],wine_b["rating"],wine_b["sentiment"],d_variance,d_vineyard,d_region))
-        weights = numpy.array((0.1, 0.2, 10, 1, 0.1, 0.2))
+        a_array = numpy.array((wine_a["rating"],wine_a["sentiment"], 0, 0, 0))
+        b_array = numpy.array((wine_b["rating"],wine_b["sentiment"],d_variance,d_vineyard,d_region))
+        weights = numpy.array((0.2, 10, 0.3, 0.1, 0.2))
         return numpy.linalg.norm(weights*(a_array - b_array))
 
     def getWineID(self,wineName):
