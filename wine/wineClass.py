@@ -1,4 +1,5 @@
 import csv
+from fuzzywuzzy import fuzz
 import datetime
 import hashlib
 import math
@@ -6,16 +7,17 @@ import os
 import pickle
 import numpy
 from textblob import TextBlob
+from wine import db
+from wine.models import Wine
+from wine import routes
 
 # wine id --> comments -> vector --ML--> wine id
 class wineClassifier:
-    # dict to put serialized file
-    storage = {}
-    wines = {}
-    distance_grid = {}
+
     # input file
     storage_file = "storage.pkl"  # location for the stored data
     input_file = "test_part1.csv"  # raw data file
+    input_hash = ""
 
     def normalize(self, score, low, high): #  possible function to scale sentiment
         return  (float(score)-low)/(high-low)
@@ -24,12 +26,11 @@ class wineClassifier:
       return 1 / (1 + math.exp(-x))
 
     def __init__(self):
+
+        print("begin init wineClassifier")
         # load pickled file
         if os.path.isfile(self.storage_file):
-            self.storage = pickle.load(open(self.storage_file, "rb"))
-            self.wines = self.storage["wines"]
-            self.distance_grid = self.storage["distance_grid"]
-
+            self.input_hash = pickle.load(open(self.storage_file, "rb"))
 
         # check if the file is different
         sha1 = hashlib.sha1()
@@ -41,19 +42,26 @@ class wineClassifier:
                 sha1.update(data)
         input_hash = sha1.hexdigest()
 
+
         # input file is same as last time, stop init
-        if self.storage.get("hash") and input_hash == self.storage["hash"]:
+        if self.input_hash and input_hash == self.input_hash:
             print("same input file as last run")
             return
+        else:
+            print("different file detected, updating")
+            self.input_hash = input_hash
 
         # read from scrapped data into wines list
         with open(self.input_file, "r" , encoding='utf-8') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='"')
+            count = 0
             for row in spamreader:
+                count += 1
                 if row[0] == "wine_id":  # skip top row
                     continue
                 wine_id = row[0]
-                if self.wines.get(wine_id):  # key exists in file, skip
+
+                if Wine.query.get(wine_id):
                     continue
                 name = row[1]
                 # print(row)
@@ -74,26 +82,18 @@ class wineClassifier:
                     comment_score += test.sentiment.polarity
                     comment_count += 1
                 avg_sentiment = comment_score / comment_count
+                new_wine = Wine(id=wine_id,name=name,rating=avg_rating,price=price,sentiment=avg_sentiment,
+                                 variance=variance,vineyard=vineyard,region=region)
+                db.session.add(new_wine)
 
-                self.wines[wine_id] = {}
-                self.wines[wine_id]["name"] = name
-                self.wines[wine_id]["rating"] = avg_rating
-                self.wines[wine_id]["price"] = price
-                self.wines[wine_id]["sentiment"] = self.normalize(avg_sentiment, -1, 1)
-                self.wines[wine_id]["variance"] = variance
-                self.wines[wine_id]["vineyard"] = vineyard
-                self.wines[wine_id]["region"] = region
-
-            #  store evaluated data in file
-            self.generateDistanceGrid()
-            self.storage["wines"] = self.wines
-            self.storage["distance_grid"] = self.distance_grid
-            self.storage["hash"] = input_hash
-            pickle.dump(self.storage, open(self.storage_file, 'wb'))
+        db.session.commit()
+        pickle.dump(self.input_hash, open(self.storage_file, 'wb'))
+        print("end init wineClassifier")
 
     """
             this function generates a dict of dict that sorts all the wine based on its similarity to the current one
              eg self.distance_grid[1][2] give the relative distance between wine 1 and wine 2
+             
     """
     def generateDistanceGrid(self):
         for wine_id, values in self.wines.items():
@@ -119,37 +119,66 @@ class wineClassifier:
     def getWineDifference(self, a_id, b_id):
         if a_id == b_id:
             return 0
-        wine_a = self.getWineInfo(a_id)
-        wine_b = self.getWineInfo(b_id)
+        wine_a = Wine.query.filter_by(id=a_id).first()
+        wine_b = Wine.query.filter_by(id=b_id).first()
         # find the difference in other factors
         d_variance = 0
         d_vineyard = 0
         d_region = 0
 
-        if not wine_a["variance"] == wine_b["variance"]:
+        if not wine_a.variance == wine_b.variance:
             d_variance = 1
-        if not wine_a["region"] == wine_b["region"]:
+        if not wine_a.region == wine_b.region:
             d_region = 1
-        if not wine_a["vineyard"] == wine_b["vineyard"]:
+        if not wine_a.vineyard == wine_b.vineyard:
             d_vineyard = 1
 
-        a_array = numpy.array((wine_a["rating"],wine_a["sentiment"], 0, 0, 0))
-        b_array = numpy.array((wine_b["rating"],wine_b["sentiment"],d_variance,d_vineyard,d_region))
+        a_array = numpy.array((wine_a.rating,wine_a.sentiment, 0, 0, 0))
+        b_array = numpy.array((wine_b.rating,wine_b.sentiment,d_variance,d_vineyard,d_region))
         weights = numpy.array((0.2, 10, 0.3, 0.1, 0.2))
         return numpy.linalg.norm(weights*(a_array - b_array))
 
-    def getWineID(self,wineName):
-        wineID = 0
-        for key,value in self.wines.items():
-            if value["name"]==str(wineName):
-                wineID = key
+    def getIdByName(self,wineName):
+        score = 0
+        wineID = -1
+        matchName = ""
+        for row in Wine.query.all():
+            if wineName == row.name:
+                wineID = row.id
+                matchName = row.name
                 break
+            new_score = fuzz.partial_ratio(wineName, row.name)
+            if new_score> score:
+                wineID = row.id
+                matchName = row.name
+        print("User input",wineName,"Best match is",matchName)
         return wineID
-    def getClosestMatch(self, wineName): 
-        wineID = self.getWineID(wineName)
-        if wineID == 0:
-            return []
-        return sorted(self.distance_grid[wineID], key=self.distance_grid[wineID].get)
 
-    def getWineInfo(self, wineiD):
-        return self.wines.get(wineiD)
+
+    def getClosestMatch(self, wineName):
+        result = {}
+        if wineName.isdigit():
+            wineID = wineName
+        else:
+            # print("Wine name is",wineName)
+            wineID = self.getIdByName(wineName)
+            if wineID == -1:
+                return []
+
+        print("WineID is",wineID)
+        for row in Wine.query.all():
+            result[row.id] = self.getWineDifference(wineID, row.id)
+        return sorted(result, key=result.get)
+
+    def getWineInfo(self, wineID):
+        targetWine = Wine.query.get(wineID)
+        result = {}
+        result["name"] = targetWine.name
+        result["rating"] = targetWine.rating
+        result["price"] = targetWine.price
+        result["sentiment"] = targetWine.sentiment
+        result["variance"] = targetWine.variance
+        result["vineyard"] = targetWine.vineyard
+        result["region"] = targetWine.region
+        result["id"] = targetWine.id
+        return result

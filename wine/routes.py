@@ -1,3 +1,5 @@
+import os
+
 from flask import render_template,url_for,request,flash,redirect
 from wine import app
 from wine import db
@@ -6,7 +8,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,SubmitField,PasswordField,BooleanField
 from wtforms.validators import DataRequired,Email,Length
 from werkzeug.security import generate_password_hash,check_password_hash
-from wine.models import User
+from wine.models import User, Wine
 from wine.wineClass import wineClassifier
 from flask_login import LoginManager,UserMixin,login_user,login_required,logout_user,current_user
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -15,6 +17,17 @@ import json
 login_manager=LoginManager()
 login_manager.init_app (app)
 login_manager.login_view='login'
+
+
+app_dir = os.path.realpath(os.path.dirname(__file__))
+database_path = os.path.join(app_dir, "database.db")
+print(database_path)
+if not os.path.exists(database_path):
+    print("building db")
+    db.drop_all()
+    db.create_all()
+    print("end building db")
+
 a = wineClassifier()
 
 class wineForm(FlaskForm):
@@ -41,14 +54,13 @@ def index():
     form=wineForm(request.form)
     if request.method == 'POST' and form.validate_on_submit():
         user_input = form.name.data
-        wineInfo=a.getWineInfo(user_input)
         similar=a.getClosestMatch(user_input)[:9]
         if not similar:
             flash(' Wine Not found ')
         else:
             newList=[]
             for id in similar:
-                info=a.getWineInfo(id)
+                info= a.getWineInfo(id)
                 r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
                 pic_url = r['wine_page_information']['vintage']['image']['location']
                 info['url']="https:"+str(pic_url)
