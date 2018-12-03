@@ -9,7 +9,7 @@ class User(UserMixin,db.Model):
     password=db.Column(db.String(80))
 
 
-class Wine(db.Model):
+class Wine(UserMixin,db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     rating = db.Column(db.Float)
@@ -18,3 +18,8 @@ class Wine(db.Model):
     variance = db.Column(db.String(255))
     vineyard = db.Column(db.String(255))
     region = db.Column(db.String(255))
+
+class UserChoice(UserMixin,db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    wine_id = db.Column(db.Integer, db.ForeignKey('wine.id'))

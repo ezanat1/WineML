@@ -1,14 +1,13 @@
 import os
-
-from flask import render_template,url_for,request,flash,redirect
+from flask import render_template,url_for,request,flash,redirect,jsonify
 from wine import app
 from wine import db
 import requests
 from flask_wtf import FlaskForm
 from wtforms import StringField,SubmitField,PasswordField,BooleanField
-from wtforms.validators import DataRequired,Email,Length
+from wtforms.validators import DataRequired,Email,Length,ValidationError
 from werkzeug.security import generate_password_hash,check_password_hash
-from wine.models import User, Wine
+from wine.models import User, Wine, UserChoice
 from wine.wineClass import wineClassifier
 from flask_login import LoginManager,UserMixin,login_user,login_required,logout_user,current_user
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -49,6 +48,21 @@ class registerForm(FlaskForm):
     password=PasswordField('Password',validators=[DataRequired(),Length(min=5,max=15)])
     submit=SubmitField('Sign up')
 
+    #Validate if the username already exists in the database
+    def validate_username(self,username):
+        user=User.query.filter_by(username=username.data).first()
+        if user:
+            raise ValidationError('Thats username is already taken.Please choose another one')
+    #Validate if the email already exists in the database
+    def validate_email(self,email):
+        user=User.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError('That email is already taken.Please choose another one')
+
+class searchDashBoard(FlaskForm):
+    wineName=StringField('wineName',validators=[DataRequired()])
+    submit=SubmitField('Search')
+
 @app.route('/',methods=['GET','POST'])
 def index():
     form=wineForm(request.form)
@@ -60,6 +74,7 @@ def index():
         else:
             newList=[]
             for id in similar:
+                print(id)
                 info= a.getWineInfo(id)
                 r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
                 pic_url = r['wine_page_information']['vintage']['image']['location']
@@ -93,15 +108,53 @@ def register():
         new_user =User(username=form.username.data,email=form.email.data,password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
-        return "<h1> Succesfully Registered"
+        return redirect (url_for('login'))
     return render_template('account.html',form=form)
 
-@app.route('/dash')
+
+@app.route('/dash',methods=['GET','POST'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html',name=current_user.username)
+    form=searchDashBoard(request.form)
+    if current_user.is_authenticated:
+        if request.method == 'POST' and form.validate_on_submit():
+            user_input = form.wineName.data
+            similar=a.getClosestMatch(user_input)[:9]
+            if not similar:
+                flash(' Wine Not found ')
+            else:
+                newList=[]
+                for id in similar:
+                    print(id)
+                    info= a.getWineInfo(id)
+                    r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
+                    pic_url = r['wine_page_information']['vintage']['image']['location']
+                    info['url']="https:"+str(pic_url)
+                    newList.append(info)
+                return render_template('searchCards.html',newList=newList,user_input=user_input)
+    return render_template('dashboard.html'
+    ,name=current_user.username,form=form)
+
+@app.route('/save',methods=['GET','POST'])
+@login_required
+def save():
+    user_id=current_user.get_id()
+    print('the user id is ',user_id)
+    wine_id=request.form['id']
+    print(wine_id)
+    preference=UserChoice(user_id=user_id,wine_id=wine_id)
+    db.session.add(preference)
+    db.session.commit()
+    return jsonify({'result':'success'})
+
+
+# @app.route('/show',methods=['GET','POST'])
+# @login_required
+# def show():
+
+
 
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))

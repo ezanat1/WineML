@@ -1,0 +1,107 @@
+{% extends "material/base.html" %}
+{% import "material/wtf.html" as wtf %}
+
+{% block title %}
+Welcome-272Wines
+{% endblock %}
+
+
+<!-- {% block styles %}
+{{super()}}
+<link rel="stylesheet"href="{{url_for('static', filename='main.css')}}">
+{% endblock %} -->
+
+{% block scripts %}
+{{super()}}
+<script src="{{url_for('static', filename='new.js')}}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="row">
+{% for w in newList %}
+  <ul class="collection">
+      <li class="collection-item avatar">
+        <img src={{ w['url'] }} style="max-height: 100px" alt="wine Image" class="circle">
+        <span class="title">{{w['name']}}</span>
+        <p><i class="material-icons">location_on</i> {{ w['region'] }}
+        </p>
+        <p> <i class="material-icons">attach_money</i> {{ w['price'] }}</p>
+        <a href="#!" class="secondary-content"><i class="material-icons addBtn" wineID="{{ w['id'] }}" >add</i></a>
+      </li>
+</ul>
+    {% endfor %}
+  </div>
+</div>
+
+  {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <title>Member List</title>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="row">
+        {% for w in newList %}
+        <div id="memberSelection{{ w['id'] }}" class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Member Number: <span id="memberNumber{{ w['id'] }}">{{ w['id'] }}</span> </h3>
+            </div>
+
+            <div class="panel-body">
+              <div class="form-inline">
+
+                <div class="form-group">
+                  <label for="nameInput{{ w['id'] }}">{{w['name']}} </label>
+                </div>
+
+                <button class="btn btn-primary addBtn" wineID="{{ w['id'] }}">add</button>
+              </div>
+            </div>
+          </div>
+
+      {% endfor %}
+    </div>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='new.js') }}"></script>
+</body>
+</html>
+
+ -->
+
+
+
+      <!-- <div class="col s4">
+          <div class="card small">
+                  <div class="card-image waves-effect waves-block waves-light">
+                      <img src={{ w['url'] }} style="max-height: 500px; padding: 10px">
+                  </div>
+                  <div class="card-content">
+                    <span class="card-title activator grey-text text-darken-4">{{w['name']}}<i class="material-icons right addBtn" wineID="{{ w['id'] }}">add</i></span>
+                  </div>
+                  <div class="card-reveal">
+                    <span class="card-title grey-text text-darken-4">Wine Recommender Engine<i class="material-icons right">close</i></span>
+                    <p>Built a wine recommendation system to help user get similar type of wine based on different comments.Sentiment analysis on user comment was made to find the best possible match.</p>
+                  </div>
+
+
+
+
+
+
