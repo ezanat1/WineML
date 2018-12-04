@@ -115,25 +115,8 @@ def register():
 @app.route('/dash',methods=['GET','POST'])
 @login_required
 def dashboard():
-    form=searchDashBoard(request.form)
-    if current_user.is_authenticated:
-        if request.method == 'POST' and form.validate_on_submit():
-            user_input = form.wineName.data
-            similar=a.getClosestMatch(user_input)[:9]
-            if not similar:
-                flash(' Wine Not found ')
-            else:
-                newList=[]
-                for id in similar:
-                    print(id)
-                    info= a.getWineInfo(id)
-                    r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
-                    pic_url = r['wine_page_information']['vintage']['image']['location']
-                    info['url']="https:"+str(pic_url)
-                    newList.append(info)
-                return render_template('searchCards.html',newList=newList,user_input=user_input)
-    return render_template('dashboard.html'
-    ,name=current_user.username,form=form)
+    # form=searchDashBoard(request.form)
+    return render_template('dashboard.html',name=current_user.username)
 
 @app.route('/save',methods=['GET','POST'])
 @login_required
@@ -148,10 +131,28 @@ def save():
     return jsonify({'result':'success'})
 
 
-# @app.route('/show',methods=['GET','POST'])
-# @login_required
-# def show():
 
+@app.route('/process',methods=['POST'])
+@login_required
+def process():
+    if current_user.is_authenticated:
+            user_input=request.form['wineName']
+            print(user_input)
+            if user_input:
+                similar=a.getClosestMatch(user_input)[:9]
+                if not similar:
+                    flash(' Wine Not found ')
+                else:
+                    newList=[]
+                    for id in similar:
+                        print(id)
+                        info= a.getWineInfo(id)
+                        r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
+                        pic_url = r['wine_page_information']['vintage']['image']['location']
+                        info['url']="https:"+str(pic_url)
+                        newList.append(info)
+                    return jsonify(newList)
+            return jsonify({'error':'missing Data'})
 
 
 @app.route('/logout')

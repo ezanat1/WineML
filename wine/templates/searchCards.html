@@ -1,40 +1,13 @@
-{% extends "material/base.html" %}
-{% import "material/wtf.html" as wtf %}
-
-{% block title %}
-Welcome-272Wines
-{% endblock %}
-
-
-<!-- {% block styles %}
-{{super()}}
-<link rel="stylesheet"href="{{url_for('static', filename='main.css')}}">
-{% endblock %} -->
-
-{% block scripts %}
-{{super()}}
-<script src="{{url_for('static', filename='new.js')}}"></script>
-{% endblock %}
-
-{% block content %}
-<div class="container">
-<div class="row">
-{% for w in newList %}
-  <ul class="collection">
+<ul class="collection">
       <li class="collection-item avatar">
-        <img src={{ w['url'] }} style="max-height: 100px" alt="wine Image" class="circle">
-        <span class="title">{{w['name']}}</span>
-        <p><i class="material-icons">location_on</i> {{ w['region'] }}
+        <img style="max-height: 100px" alt="wine Image" class="circle">
+        <span class="title">Hello Ezana</span>
+        <p><i class="material-icons">location_on</i>
         </p>
-        <p> <i class="material-icons">attach_money</i> {{ w['price'] }}</p>
+        <p> <i class="material-icons">attach_money</i></p>
         <a href="#!" class="secondary-content"><i class="material-icons addBtn" wineID="{{ w['id'] }}" >add</i></a>
       </li>
 </ul>
-    {% endfor %}
-  </div>
-</div>
-
-  {% endblock %}
 
 
 
