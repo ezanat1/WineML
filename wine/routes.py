@@ -80,6 +80,15 @@ def index():
                 pic_url = r['wine_page_information']['vintage']['image']['location']
                 info['url']="https:"+str(pic_url)
                 newList.append(info)
+                info=a.getWineInfo(id)
+                if count > 8:
+                    break
+                if info['price']<=float(user_price):
+                    r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
+                    pic_url = r['wine_page_information']['vintage']['image']['location']
+                    info['url']="https:"+str(pic_url)
+                    newList.append(info)
+                    count += 1
             return render_template('rec.html',newList=newList,user_input=user_input)
     return render_template('index.html',form=form)
 
@@ -128,7 +137,14 @@ def save():
     preference=UserChoice(user_id=user_id,wine_id=wine_id)
     db.session.add(preference)
     db.session.commit()
+
     return jsonify({'result':'success'})
+
+@app.route('/myWine')
+@login_required
+def myWine():
+    # wines=UserChoice.query.all()
+    return render_template('myWines.html')
 
 
 
