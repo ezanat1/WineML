@@ -148,24 +148,18 @@ class wineClassifier:
                 matchName = row.name
                 break
             new_score = fuzz.partial_ratio(wineName, row.name)
-            if new_score> score:
+            if new_score > score:
+                score = new_score
                 wineID = row.id
                 matchName = row.name
         print("User input",wineName,"Best match is",matchName)
         return wineID
 
 
-    def getClosestMatch(self, wineName):
+    def getClosestMatch(self, wineID):
         result = {}
-        if wineName.isdigit():
-            wineID = wineName
-        else:
-            # print("Wine name is",wineName)
-            wineID = self.getIdByName(wineName)
-            if wineID == -1:
-                return []
-
-        print("WineID is",wineID)
+        if wineID == -1:
+            return []
         for row in Wine.query.all():
             result[row.id] = self.getWineDifference(wineID, row.id)
         return sorted(result, key=result.get)

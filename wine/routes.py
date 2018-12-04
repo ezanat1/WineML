@@ -30,7 +30,8 @@ if not os.path.exists(database_path):
 a = wineClassifier()
 
 class wineForm(FlaskForm):
-    name=StringField('Wine Name',validators=[DataRequired()])
+    name=StringField('Enter a Wine You Like',validators=[DataRequired()])
+    price=StringField('Enter the Max Price of Output Wines',validators=[DataRequired()])
     submit=SubmitField()
 
 @login_manager.user_loader
@@ -68,18 +69,25 @@ def index():
     form=wineForm(request.form)
     if request.method == 'POST' and form.validate_on_submit():
         user_input = form.name.data
-        similar=a.getClosestMatch(user_input)[:9]
+        user_price = form.price.data
+        wineID=a.getIdByName(user_input)
+        print(wineID)
+        similar=a.getClosestMatch(wineID)
         if not similar:
             flash(' Wine Not found ')
         else:
             newList=[]
+            count = 0
             for id in similar:
+<<<<<<< HEAD
                 print(id)
                 info= a.getWineInfo(id)
                 r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
                 pic_url = r['wine_page_information']['vintage']['image']['location']
                 info['url']="https:"+str(pic_url)
                 newList.append(info)
+=======
+>>>>>>> 1f76de6d2647ec08e663d72400c0d3e2e9d0c7cd
                 info=a.getWineInfo(id)
                 if count > 8:
                     break
