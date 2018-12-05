@@ -74,7 +74,7 @@ def index():
         user_food=form.food.data
         wineID=a.getIdByName(user_input)
         print(wineID)
-        similar=a.getClosestMatch(wineID,user_food)
+        similar=a.getClosestMatch(wineID,[user_food])
         if not similar:
             flash(' Wine Not found ')
         else:
