@@ -8,7 +8,8 @@ $(document).ready(function(){
       },7550);
       $.ajax({
         data:{
-          wineName:$('#wineName').val()
+          wineName:$('#wineName').val(),
+          price:$('#price').val()
         },
         type:'POST',
         url:'/process'
@@ -29,8 +30,8 @@ $(document).ready(function(){
             // O.appendTo(mainDiv)
             // mainDiv.appendTo('#result')
 
-          let mainDiv=$('<div class="col s6 m4"></div>')
-          let O=$('<div class="style="height: 400px" class="card"><div class="card-image waves-effect waves-block waves-light"><img src='+value.url+' style="max-height: 300px; padding: 10px"></div><div class="card-content"><span class="card-title activator grey-text text-darken-4">'+value.name+'<i class="material-icons right addBtn" wineID='+value.id+'>add</i></span></div>')
+          let mainDiv=$('<div class="col s6 m3"></div>')
+          let O=$('<div style="height: 400px" class="card" style="height: 400px"><div class="card-image waves-effect waves-block waves-light"><img src='+value.url+' style="max-height: 400px; padding: 10px"></div><div class="card-content"><span class="card-title">'+value.name+ '</span></div><a class="btn-floating halfway-fab waves-effect waves-light red addBtn" wineid='+value.id+'><i class="material-icons">add</i></a> <p><i class="material-icons">location_on</i>' +value.region+'</p>')
           O.appendTo(mainDiv)
           mainDiv.appendTo('#result')
         });
@@ -39,14 +40,4 @@ $(document).ready(function(){
       event.preventDefault()
 
     });
-
-    $('.addBtn').on('click',function(){
-    let wineID=$(this).attr('wineid');
-    console.log(wineID);
-    req=$.ajax({
-      url:'/save',
-      type:'POST',
-      data:{ id:wineID }
-    })
-  })
 });

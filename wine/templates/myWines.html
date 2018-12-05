@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Hello {{ name }}</title>
+    <title>myWines</title>
     <!-- Material Icon CDN -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Materialize CSS CDN -->
@@ -19,10 +19,10 @@
       <nav class="teal">
         <div class="nav-wrapper">
           <div class="container">
-            <a href="#" class="brand-logo">Hello {{ name }}</a>
+            <a href="{{ url_for('dashboard') }}" class="brand-logo">Wines</a>
             <a href="#" data-activates="mobile-menu" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-              <li><a href="{{ url_for('myWine') }}">My Wine</a></li>
+              <li><a href="{{ url_for('dashboard') }}">Search Wine</a></li>
               <li><a href="#">Top Wines</a></li>
               <li><a href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
@@ -46,12 +46,6 @@
       </nav>
     </header>
     <main>
-      <!-- <form class="">
-        <input type="text" id='wineName' placeholder="Enter Wine Name">
-        <button type="submit">Search</button>
-
-      </form> -->
-
           <div class="container">
           <div id="content">
           <div class="div1">
@@ -59,17 +53,18 @@
             </div>
             <div class="row">
                 <div id='result'>
-
+                    {% for w in newList %}
                     <ul class="collection">
                             <li class="collection-item avatar">
-                              <img style="max-height: 100px" alt="wine Image" class="circle">
-                              <span class="title">Hello Ezana</span>
+                              <img src ="{{ w['url'] }}" style="max-height: 100px" alt="wine Image" class="circle">
+                              <span class="title">{{ w['name'] }}</span>
                               <p><i class="material-icons">location_on</i>
                               </p>
-                              <p> <i class="material-icons">attach_money</i></p>
-                              <a href="#!" class="secondary-content"><i class="material-icons">add</i></a>
+                              <p> <i class="material-icons">attach_money</i>{{w['price']}}</p>
+                              <a href="#" class="secondary-content"><i class="material-icons deleteBtn" wineID="{{ w['id'] }}">delete</i></a>
                             </li>
                       </ul>
+                      {% endfor %}
 
 
                   </div>
@@ -85,6 +80,21 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <!-- Materialize JS CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="{{ url_for('static', filename='new.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='new.js') }}"></script> -->
+    <script>
+    $(document).ready(function(){
+        $('#result').on('click','.deleteBtn',function(){
+        let wineID=$(this).attr('wineID');
+        console.log(wineID);
+        req=$.ajax({
+        url:'/deleteWine',
+        type:'POST',
+        data:{ id:wineID }
+        })
+        $('.collection').fadeOut(300, function(){ $(this).remove()});
+    })
+});
+
+    </script>
   </body>
 </html>

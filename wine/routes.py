@@ -1,5 +1,5 @@
 import os
-from flask import render_template,url_for,request,flash,redirect,jsonify
+from flask import render_template,url_for,request,flash,redirect,jsonify,session
 from wine import app
 from wine import db
 import requests
@@ -79,15 +79,6 @@ def index():
             newList=[]
             count = 0
             for id in similar:
-<<<<<<< HEAD
-                print(id)
-                info= a.getWineInfo(id)
-                r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
-                pic_url = r['wine_page_information']['vintage']['image']['location']
-                info['url']="https:"+str(pic_url)
-                newList.append(info)
-=======
->>>>>>> 1f76de6d2647ec08e663d72400c0d3e2e9d0c7cd
                 info=a.getWineInfo(id)
                 if count > 8:
                     break
@@ -135,6 +126,35 @@ def dashboard():
     # form=searchDashBoard(request.form)
     return render_template('dashboard.html',name=current_user.username)
 
+@app.route('/process',methods=['POST'])
+@login_required
+def process():
+    if current_user.is_authenticated:
+            user_input=request.form['wineName']
+            user_price = request.form['price']
+            user_price=float(user_price)
+            wineID=a.getIdByName(user_input)
+            print(wineID)
+            similar=a.getClosestMatch(wineID)
+            if not similar:
+                flash(' Wine Not found ')
+            else:
+                newList=[]
+                count = 0
+                for id in similar:
+                    info=a.getWineInfo(id)
+                    if count > 8:
+                        break
+                    if info['price']<=float(user_price):
+                        r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
+                        pic_url = r['wine_page_information']['vintage']['image']['location']
+                        info['url']="https:"+str(pic_url)
+                        newList.append(info)
+                        count += 1
+                print(jsonify(newList))
+                return jsonify(newList)
+            return jsonify({'error':'missing Data'})
+
 @app.route('/save',methods=['GET','POST'])
 @login_required
 def save():
@@ -145,38 +165,37 @@ def save():
     preference=UserChoice(user_id=user_id,wine_id=wine_id)
     db.session.add(preference)
     db.session.commit()
-
     return jsonify({'result':'success'})
 
 @app.route('/myWine')
 @login_required
 def myWine():
-    # wines=UserChoice.query.all()
-    return render_template('myWines.html')
+    user_id1=current_user.get_id()
+    wines=UserChoice.query.filter_by(user_id=user_id1)
+    wineID=[w.wine_id for w in wines]
+    newList=[]
+    for w in wineID:
+        info=a.getWineInfo(w)
+        r=requests.get('https://www.vivino.com/api/wines/'+str(w)+'/wine_page_information').json()
+        pic_url = r['wine_page_information']['vintage']['image']['location']
+        info['url']="https:"+str(pic_url)
+        newList.append(info)
+    return render_template('myWines.html',newList=newList)
 
-
-
-@app.route('/process',methods=['POST'])
+@app.route('/deleteWine', methods=['POST'])
 @login_required
-def process():
-    if current_user.is_authenticated:
-            user_input=request.form['wineName']
-            print(user_input)
-            if user_input:
-                similar=a.getClosestMatch(user_input)[:9]
-                if not similar:
-                    flash(' Wine Not found ')
-                else:
-                    newList=[]
-                    for id in similar:
-                        print(id)
-                        info= a.getWineInfo(id)
-                        r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
-                        pic_url = r['wine_page_information']['vintage']['image']['location']
-                        info['url']="https:"+str(pic_url)
-                        newList.append(info)
-                    return jsonify(newList)
-            return jsonify({'error':'missing Data'})
+def deleteWine():
+        user_id=current_user.get_id()
+        print(user_id)
+        wine_id=request.form['id']
+        print(wine_id)
+        # wine=UserChoice(user_id=user_id,wine_id=wine_id)
+        wine=UserChoice.query.filter_by(wine_id=wine_id).first()
+        print(wine)
+        db.session.delete(wine)
+        db.session.commit()
+        return jsonify({'result':wine_id})
+        return redirect(url_for('myWine'))
 
 
 @app.route('/logout')
