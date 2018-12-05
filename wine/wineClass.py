@@ -10,6 +10,7 @@ from textblob import TextBlob
 from wine import db
 from wine.models import Wine
 from wine import routes
+from wine import pairings
 
 # wine id --> comments -> vector --ML--> wine id
 class wineClassifier:
@@ -152,17 +153,68 @@ class wineClassifier:
                 score = new_score
                 wineID = row.id
                 matchName = row.name
-        print("User input",wineName,"Best match is",matchName)
+        print("User wine input",wineName,"Best match is",matchName)
         return wineID
 
+    def getWineByPairing(self, wineID):
+        print(pairings.wines)
 
-    def getClosestMatch(self, wineID):
+    """
+        This method takes in a probable food name, first finds the food that matches the input
+         then returns the type of wines that matches the food 
+    """
+    def getPairingByName(self,food_name):
+
+        score = 0
+        index = -1
+        matchName = ""
+
+        if food_name.lower() == "chicken":  # hard code entries
+            food_name = "Poultry"
+
+
+        if food_name in pairings.ref:
+            matchName = food_name
+            index = pairings.ref.index(matchName)
+        else:
+            for ref_name in pairings.ref:
+                new_score = fuzz.partial_ratio(food_name,ref_name)
+                if new_score > score:
+                    score = new_score
+                    matchName = ref_name
+                    index = pairings.ref.index(matchName)
+        print("User food input", food_name, "Best match is", matchName)
+        # name found, find pairing wines
+
+        match_wines = []
+        for wine, match_board in pairings.wines.items():
+            if match_board[index] == 1:
+                match_wines.append(wine)
+        return match_wines
+
+
+    def getClosestMatch(self, wineID, pairings = None):
+        wine_type = []
         result = {}
         if wineID == -1:
             return []
+
+        # iterate through the list of pairings
+        if pairings:
+            for p in pairings:
+                temp_match = self.getPairingByName(p)
+                wine_type += temp_match # merge wine lists
+
+        wine_type = list(set(wine_type)) # remove duplicates
+
         for row in Wine.query.all():
-            result[row.id] = self.getWineDifference(wineID, row.id)
+            if not wine_type: # if no pairing info given
+                result[row.id] = self.getWineDifference(wineID, row.id)
+            else: # user request pairing:
+                if row.variance in wine_type: # only add when the variance of the wine matches
+                    result[row.id] = self.getWineDifference(wineID, row.id)
         return sorted(result, key=result.get)
+
 
     def getWineInfo(self, wineID):
         targetWine = Wine.query.get(wineID)
