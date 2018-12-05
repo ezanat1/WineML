@@ -32,6 +32,7 @@ a = wineClassifier()
 class wineForm(FlaskForm):
     name=StringField('Enter a Wine You Like',validators=[DataRequired()])
     price=StringField('Enter the Max Price of Output Wines',validators=[DataRequired()])
+    food=StringField('Food Paring',validators=[DataRequired()])
     submit=SubmitField()
 
 @login_manager.user_loader
@@ -70,9 +71,10 @@ def index():
     if request.method == 'POST' and form.validate_on_submit():
         user_input = form.name.data
         user_price = form.price.data
+        user_food=form.food.data
         wineID=a.getIdByName(user_input)
         print(wineID)
-        similar=a.getClosestMatch(wineID)
+        similar=a.getClosestMatch(wineID,user_food)
         if not similar:
             flash(' Wine Not found ')
         else:
@@ -88,7 +90,9 @@ def index():
                     info['url']="https:"+str(pic_url)
                     newList.append(info)
                     count += 1
+            print(newList)
             return render_template('rec.html',newList=newList,user_input=user_input)
+
     return render_template('index.html',form=form)
 
 @app.errorhandler(404)
@@ -123,7 +127,6 @@ def register():
 @app.route('/dash',methods=['GET','POST'])
 @login_required
 def dashboard():
-    # form=searchDashBoard(request.form)
     return render_template('dashboard.html',name=current_user.username)
 
 @app.route('/process',methods=['POST'])
@@ -133,6 +136,8 @@ def process():
             user_input=request.form['wineName']
             user_price = request.form['price']
             user_price=float(user_price)
+            # user_food = request.form['userFood']
+            # print(user_food)
             wineID=a.getIdByName(user_input)
             print(wineID)
             similar=a.getClosestMatch(wineID)
@@ -165,6 +170,7 @@ def save():
     preference=UserChoice(user_id=user_id,wine_id=wine_id)
     db.session.add(preference)
     db.session.commit()
+    flash('Your Wine is Saved')
     return jsonify({'result':'success'})
 
 @app.route('/myWine')

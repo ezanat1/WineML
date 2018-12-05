@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Hello {{ name }}</title>
     <!-- Material Icon CDN -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Materialize CSS CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="icon" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
     <!-- Your custom styles -->
+    <title>Dashboard</title>
     <link rel="stylesheet"href="{{url_for('static', filename='dash.css')}}">
     <!-- Used as an example only to position the footer at the end of the page.
     You can delete these styles or move it to your custom css file -->
@@ -22,6 +24,7 @@
             <a href="{{ url_for('dashboard') }}" class="brand-logo">Wines</a>
             <a href="#" data-activates="mobile-menu" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
+              <li><a href="#">{{ name }}</a></li>
               <li><a href="{{ url_for('myWine') }}">My Wine</a></li>
               <li><a href="#">Top Wines</a></li>
               <li><a href="{{ url_for('logout') }}">Logout</a></li>
@@ -44,34 +47,105 @@
         </div>
       </nav>
     </header>
-    <main>
-      <!-- <form class="">
-        <input type="text" id='wineName' placeholder="Enter Wine Name">
-        <button type="submit">Search</button>
 
-      </form> -->
-
-<div class="container">
+      <div class="container z-depth-1" style="padding:10px 20px 10px 20px;box-sizing: content-box">
       <div class="row">
-        <h4>Dashboard <span style="color:grey;font-size: 20px;text-transform: uppercase">{{ name }}</span></h4>
         <br>
         <form class="col s12">
             <div class="row">
-              <div class="input-field col s6">
+              <div class="input-field col s3">
                 <i class="material-icons prefix">create</i>
                 <input id="wineName" type="text" class="validate">
-                <label for="icon_prefix">Wine Name...</label>
+                <label for="icon_prefix">Your Wine Name...</label>
               </div>
-              <div class="input-field col s6">
+              <div class="input-field col s3">
                 <i class="material-icons prefix">attach_money</i>
-                <input id="price" type="tel" class="validate">
-                <label for="icon_telephone">Your Price</label>
+                <input id="price" type="text" class="validate">
+                <label for="price">Your Price...</label>
               </div>
-              <button class="btn waves-effect waves-light" type="submit" name="action"><i class="material-icons">search</i></button>
+              <div class="input-field col s3">
+                  <i class="material-icons prefix">restaurant_menu</i>
+                  <input id="userFood" name ='userFood' type="text" class="validate">
+                  <label for="food">You Food...</label>
+              </div>
+              <div class="col s3">
+                  <button class="btn waves-effect waves-light search" type="submit" name="action"><i class="material-icons">search</i> Search</button>
+              </div>
+
             </div>
 
           </form>
+      </div>
+        </div>
+</div>
+        <div class="container con">
+            <div class="row">
+              <div class="col s12 align-center">
+                  <h2 class="align-center">Our Favourite<span> Pinor Noir</span></h2>
+              </div>
+            <div class="card col s3" style="height:400px">
+                <div class="card-image waves-effect waves-block waves-light">
+                  <img class="activator" style="overflow: hidden" src="{{url_for('static', filename='wines/first.jpg')}}">
+                </div>
+                <div class="card-content">
+                  <span class="card-title activator grey-text text-darken-4"style="font-family:cursive;font-size:20px">Gratavinum Shiraz</span>
+                </div>
+                <div class="card-reveal">
+                  <span class="card-title grey-text text-darken-4"style="font-family:cursive;font-size:20px">Gratavinum Shiraz<i class="material-icons right">close</i></span>
 
+                  <p><i class="material-icons">location_on</i>vineyard:Gratavinum </p>
+                  <p><i class="material-icons">location_on</i>region: 'Priorat'</p>
+                </div>
+              </div>
+
+              <div class="card col s3" style="height:400px">
+                  <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator" style="overflow: hidden" src="{{url_for('static', filename='wines/second.jpg')}}">
+                  </div>
+                  <div class="card-content">
+                    <span class="card-title activator grey-text text-darken-4"style="font-family:cursive;font-size:20px">Yorba Zinfandel</span>
+                  </div>
+                  <div class="card-reveal">
+                    <span class="card-title grey-text text-darken-4" style="font-family:cursive;font-size:20px">Yorba Zinfandel<i class="material-icons right">close</i></span>
+
+                    <p><i class="material-icons">location_on</i>vineyard: Yorba </p>
+                    <p><i class="material-icons">location_on</i>Region: California </p>
+                  </div>
+                </div>
+
+                <div class="card col s3" style="height:400px">
+                    <div class="card-image waves-effect waves-block waves-light">
+                      <img class="activator" style="overflow: hidden"  src="{{url_for('static', filename='wines/third.png')}}">
+                    </div>
+                    <div class="card-content">
+                      <span class="card-title activator grey-text text-darken-4"style="font-family:cursive;font-size:20px">Domaine de Panisse Shiraz</span>
+
+                    </div>
+                    <div class="card-reveal">
+                      <span class="card-title grey-text text-darken-4"style="font-family:cursive;font-size:20px">Domaine de Panisse Shiraz<i class="material-icons right">close</i></span>
+                      <p><i class="material-icons">location_on</i>vineyard: Domaine de Panisse </p>
+                      <p><i class="material-icons">location_on</i>Region: Châteauneuf-du-Pape </p>
+                    </div>
+                  </div>
+                  <div class="card col s3 " style="height:400px">
+                      <div class="card-image waves-effect waves-block waves-light">
+                        <img class="activator" style="overflow: hidden" src="{{url_for('static', filename='wines/fourth.png')}}">
+                      </div>
+                      <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4"style="font-family:cursive;font-size:20px">Gilbert et Christine Felettig</span>
+
+                      </div>
+                      <div class="card-reveal">
+                        <span class="card-title grey-text text-darken-4"style="font-family:cursive;font-size:20px">Gilbert et Christine Felettig Pinot Noir<i class="material-icons right">close</i></span>
+                        <p><i class="material-icons">location_on</i>vineyard: Gilbert et Christine Felettig </p>
+                      <p><i class="material-icons">location_on</i>Region: Vosne-Romanée </p>
+                      </div>
+                    </div>
+
+
+
+
+            </div>
           </div>
         </div>
           <div class="container">
@@ -96,6 +170,9 @@
     <script src="{{ url_for('static', filename='new.js') }}"></script>
     <script>
     $(document).ready(function(){
+    $('.search').click(function(){
+      $('.con').hide();
+    })
     $('#result').on('click','.addBtn',function(){
     let wineID=$(this).attr('wineid');
     console.log(wineID);

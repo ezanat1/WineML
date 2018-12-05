@@ -5,7 +5,7 @@ $(document).ready(function(){
       setTimeout(function(){
         document.querySelector('.div1').classList.remove('progress')
         document.querySelector('.div2').classList.remove('indeterminate')
-      },7550);
+      },7600);
       $.ajax({
         data:{
           wineName:$('#wineName').val(),
@@ -30,8 +30,8 @@ $(document).ready(function(){
             // O.appendTo(mainDiv)
             // mainDiv.appendTo('#result')
 
-          let mainDiv=$('<div class="col s6 m3"></div>')
-          let O=$('<div style="height: 400px" class="card" style="height: 400px"><div class="card-image waves-effect waves-block waves-light"><img src='+value.url+' style="max-height: 400px; padding: 10px"></div><div class="card-content"><span class="card-title">'+value.name+ '</span></div><a class="btn-floating halfway-fab waves-effect waves-light red addBtn" wineid='+value.id+'><i class="material-icons">add</i></a> <p><i class="material-icons">location_on</i>' +value.region+'</p>')
+          let mainDiv=$('<div class="col s3 m4"></div>')
+          let O=$('<div class="card "><div class="card-image waves-effect waves-block waves-light"><img src='+value.url+' style="max-height: 400px; padding: 10px"><a class="btn-floating right btn-small  waves-effect waves-light red addBtn" wineid='+value.id+'><i class="material-icons">add</i></a></div><div class="card-content"><span style="font-size:20px;font-family:cursive;overflow: hidden">'+value.name+ '</span><p><i class="material-icons">location_on</i>'+value.region+'</p></div></div></div>')
           O.appendTo(mainDiv)
           mainDiv.appendTo('#result')
         });

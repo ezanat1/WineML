@@ -22,6 +22,7 @@
             <a href="{{ url_for('dashboard') }}" class="brand-logo">Wines</a>
             <a href="#" data-activates="mobile-menu" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
+              <li><a href="#">{{ name }}</a></li>
               <li><a href="{{ url_for('dashboard') }}">Search Wine</a></li>
               <li><a href="#">Top Wines</a></li>
               <li><a href="{{ url_for('logout') }}">Logout</a></li>
