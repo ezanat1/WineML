@@ -17,7 +17,7 @@ Recommendations
 <div class="row">
         {% for w in newList %}
           <div class="col s6 m4">
-            <div style="height: 570px" class="card">
+            <div style="height: 600px" class="card">
               <div class="card-image">
                 <img src={{ w['url'] }} style="max-height: 400px; padding: 10px">
                 <!-- <img src="https://images.vivino.com/thumbs/qBnyG6oJSQmlejT3ftVgGw_pl_480x640.png" max-height: 330px"> -->
@@ -28,6 +28,7 @@ Recommendations
                 <p><i class="material-icons">location_on</i> {{ w['region'] }}
                 </p>
                 <p> <i class="material-icons">attach_money</i> {{ w['price'] }}</p>
+                <p> <i class="material-icons">local_dining</i> {{ w['pairing'] }}</p>
               </div>
             </div>
           </div>
