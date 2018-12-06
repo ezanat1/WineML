@@ -24,7 +24,7 @@
             <a href="{{ url_for('dashboard') }}" class="brand-logo" style="font-family:cursive"><i class="fas fa-wine-bottle"></i> Wines</a>
             <a href="#" data-activates="mobile-menu" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-              <li><a href="#">{{ name }}</a></li>
+              <li><span style="color:black;font-family: cursive">{{ name }}</span></li>
               <li><a href="{{ url_for('myWine') }}">My Wine</a></li>
               <li><a href="#">Top Wines</a></li>
               <li><a href="{{ url_for('logout') }}">Logout</a></li>
@@ -47,7 +47,7 @@
       </nav>
     </header>
 
-      <div class="container z-depth-1" style="padding:10px 20px 10px 20px;box-sizing: content-box">
+      <div class="container" style="padding:10px 20px 10px 20px;box-sizing: content-box">
       <div class="row">
         <br>
         <form class="col s12">
@@ -67,19 +67,19 @@
                   <input id="food" name ='userFood' type="text" class="validate">
                   <label for="food">You Food...</label>
               </div>
-
               <div class="col s3">
-                  <button class="btn waves-effect waves-light search" type="submit" name="action"><i class="material-icons">search</i> Search</button>
+                  <button class="btn waves-effect waves-light btn-large search" type="submit" name="action"><i class="material-icons">search</i> Search</button>
               </div>
             </div>
           </form>
+          <hr>
       </div>
         </div>
 </div>
         <div class="container con">
             <div class="row">
-              <div class="col s12 align-center">
-                  <h2 class="align-center">Our Favourite<span> Pinor Noir</span></h2>
+              <div class="col s12">
+                  <h3 class="align-center">Our Picks Pinor Noir</h3>
               </div>
             <div class="card col s3" style="height:400px">
                 <div class="card-image waves-effect waves-block waves-light">

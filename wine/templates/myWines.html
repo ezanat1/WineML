@@ -19,10 +19,10 @@
       <nav class="teal">
         <div class="nav-wrapper">
           <div class="container">
-            <a href="{{ url_for('dashboard') }}" class="brand-logo">Wines</a>
+            <a href="{{ url_for('dashboard') }}" class="brand-logo"><i class="fas fa-wine-bottle"></i> Wines</a>
             <a href="#" data-activates="mobile-menu" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-              <li><a href="#">{{ name }}</a></li>
+              <li><span>{{ name }}</span></li>
               <li><a href="{{ url_for('dashboard') }}">Search Wine</a></li>
               <li><a href="#">Top Wines</a></li>
               <li><a href="{{ url_for('logout') }}">Logout</a></li>
@@ -34,8 +34,7 @@
                     <img src="http://lorempixel.com/output/abstract-q-c-640-480-10.jpg" alt="Background Sidenav">
                   </div>
                   <a href="#!user"><img class="circle" src="http://lorempixel.com/output/people-q-c-640-480-9.jpg" alt="User Image Sidenav"></a>
-                  <a href="#!name"><span class="white-text name">John Doe</span></a>
-                  <a href="#!email"><span class="white-text email">jdandturk@gmail.com</span></a>
+                  <a href="#!name"><span class="white-text name">{{ name }}</span></a>
                 </div>
               </li>
               <li><a href="#">My Wine</a></li>
@@ -55,7 +54,7 @@
             <div class="row">
                 <div id='result'>
                     {% for w in newList %}
-                    <ul class="collection">
+                    <ul class="collection" id="{{ w['id'] }}">
                             <li class="collection-item avatar">
                               <img src ="{{ w['url'] }}" style="max-height: 100px" alt="wine Image" class="circle">
                               <span class="title">{{ w['name'] }}</span>
@@ -66,8 +65,6 @@
                             </li>
                       </ul>
                       {% endfor %}
-
-
                   </div>
             </div>
 
@@ -86,13 +83,14 @@
     $(document).ready(function(){
         $('#result').on('click','.deleteBtn',function(){
         let wineID=$(this).attr('wineID');
-        console.log(wineID);
+        $("#"+wineID).fadeOut("normal", function() {
+        $(this).remove();});
         req=$.ajax({
         url:'/deleteWine',
         type:'POST',
         data:{ id:wineID }
         })
-        $('.collection').fadeOut(300, function(){ $(this).remove()});
+
     })
 });
 

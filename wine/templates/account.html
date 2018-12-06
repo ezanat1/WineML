@@ -5,6 +5,11 @@
 Register
 {% endblock %}
 
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"href="{{url_for('static', filename='main.css')}}">
+{% endblock %}
+
 {% block content %}
 <div class="container">
         <form class="col s12" method="POST"   action="/register">
