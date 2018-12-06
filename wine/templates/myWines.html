@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Materialize CSS CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <!-- Your custom styles -->
     <link rel="stylesheet"href="{{url_for('static', filename='dash.css')}}">
     <!-- Used as an example only to position the footer at the end of the page.
@@ -19,7 +20,7 @@
       <nav class="teal">
         <div class="nav-wrapper">
           <div class="container">
-            <a href="{{ url_for('dashboard') }}" class="brand-logo"><i class="fas fa-wine-bottle"></i> Wines</a>
+            <a href="{{ url_for('dashboard') }}" class="brand-logo" style="font-family:cursive"><i class="fas fa-wine-bottle"></i> Wines</a>
             <a href="#" data-activates="mobile-menu" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
               <li><span>{{ name }}</span></li>
