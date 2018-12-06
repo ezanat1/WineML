@@ -29,13 +29,13 @@ if not os.path.exists(database_path):
 
 a = wineClassifier()
 
-class wineForm(FlaskForm):
-    name=StringField('Enter a Vineyard or Varietal',validators=[DataRequired()])
-    price=StringField('Enter the Max Price of Output Wines',validators=[DataRequired()])
-    food=StringField('Choose Food Pairing From: Game, Fish, Vegetarian, '+
-    'Pasta, Poultry, Pork, Spicy, Seafood, Shellfish, Veal, Cheese, '+
-    'Lamb, Mushrooms, Beef, Cured Meat, Desserts',validators=[DataRequired()])
-    submit=SubmitField()
+# class wineForm(FlaskForm):
+#     name=StringField('Enter a Vineyard or Varietal',validators=[DataRequired()])
+#     price=StringField('Enter the Max Price of Output Wines',validators=[DataRequired()])
+#     food=StringField('Choose Food Pairing From: Game, Fish, Vegetarian, '+
+#     'Pasta, Poultry, Pork, Spicy, Seafood, Shellfish, Veal, Cheese, '+
+#     'Lamb, Mushrooms, Beef, Cured Meat, Desserts',validators=[DataRequired()])
+#     submit=SubmitField()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -73,9 +73,15 @@ def index():
     if request.method == 'POST':
         user_input = request.form['wineName']
         user_price = request.form['price']
+        print(user_price)
+        if not user_price:
+            user_price=9999
         user_food=request.form['food']
         wineID=a.getIdByName(user_input)
-        similar=a.getClosestMatch(wineID,[user_food])
+        if user_food == 'None':
+            similar=a.getClosestMatch(wineID)
+        else:
+            similar=a.getClosestMatch(wineID,[user_food])
         if not similar:
             flash(' Wine Not found ')
         else:
