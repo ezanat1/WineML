@@ -61,9 +61,25 @@
                 <label for="price">Your Price...</label>
               </div>
               <div class="input-field col s3">
-                  <i class="material-icons prefix">restaurant_menu</i>
-                  <input id="food" name ='userFood' type="text" class="validate">
-                  <label for="food">You Food...</label>
+                  <select id='food' name="food">
+                      <option value="" disabled selected>Choose your option</option>
+                      <option value="Game">Game</option>
+                      <option value="Fish">Fish</option>
+                      <option value="Vegetarian">Vegetarian</option>
+                      <option value="Pasta">Pasta</option>
+                      <option value="Poultry">Poultry</option>
+                      <option value="Pork">Pork</option>
+                      <option value="Spicy">Spicy</option>
+                      <option value="Seafood">Seafood</option>
+                      <option value="Shellfish">Shellfish</option>
+                      <option value="Veal">Veal</option>
+                      <option value="Lamb">Lamb</option>
+                      <option value="Mushrooms">Mushrooms</option>
+                      <option value="Beef">Beef</option>
+                      <option value="Cured Meat">Cured Meat</option>
+                      <option value="Desserts">Desserts</option>
+                    </select>
+                    <label>Your Food</label>
               </div>
               <div class="col s3">
                   <button class="btn waves-effect waves-light btn-large search" type="submit" name="action"><i class="material-icons">search</i> Search</button>
@@ -158,6 +174,7 @@
     <script src="{{ url_for('static', filename='new.js') }}"></script>
     <script>
     $(document).ready(function(){
+      $('select').formSelect();
     $('.search').click(function(){
       $('.con').hide();
     })
