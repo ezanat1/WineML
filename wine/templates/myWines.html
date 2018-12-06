@@ -25,7 +25,6 @@
             <ul class="right hide-on-med-and-down">
               <li><span>{{ name }}</span></li>
               <li><a href="{{ url_for('dashboard') }}">Search Wine</a></li>
-              <li><a href="#">Top Wines</a></li>
               <li><a href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
             <ul class="side-nav" id="mobile-menu">
@@ -39,7 +38,6 @@
                 </div>
               </li>
               <li><a href="#">My Wine</a></li>
-              <li><a href="#">Top Wines</a></li>
               <li><a href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
           </div>
@@ -59,8 +57,7 @@
                             <li class="collection-item avatar">
                               <img src ="{{ w['url'] }}" style="max-height: 100px" alt="wine Image" class="circle">
                               <span class="title">{{ w['name'] }}</span>
-                              <p><i class="material-icons">location_on</i>
-                              </p>
+                              <p><i class="material-icons">location_on</i>{{w['region']}}</p>
                               <p> <i class="material-icons">attach_money</i>{{w['price']}}</p>
                               <a href="#" class="secondary-content"><i class="material-icons deleteBtn" wineID="{{ w['id'] }}">delete</i></a>
                             </li>
