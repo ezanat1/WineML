@@ -20,6 +20,12 @@ body,html{
     color: black;
     font-size: 80px;
 }
+h1{
+    font-family: cursive;
+    color: black;
+    font-size: 80px;
+
+}
 
 .butons{
     padding-top: 80px;

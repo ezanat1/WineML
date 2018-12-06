@@ -1,36 +1,65 @@
-{% extends "material/base.html" %}
-{% import "material/wtf.html" as wtf %}
-
-{% block title %}
-Welcome
-{% endblock %}
-
-    {% block styles %}
-    {{super()}}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Material Icon CDN -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Materialize CSS CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="icon" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+    <!-- Your custom styles -->
+    <title>Welcome</title>
     <link rel="stylesheet"href="{{url_for('static', filename='main.css')}}">
-    {% endblock %}
-
-    {% block scripts %}
-    {{super()}}
-    <script src="{{url_for('static', filename='new.js')}}"></script>
-    {% endblock %}
-
-{% block content %}
+    <!-- Used as an example only to position the footer at the end of the page.
+    You can delete these styles or move it to your custom css file -->
+  </head>
+  <body>
  <div class="outter">
     <div class="container">
         <div class="butons right-align ">
-            <a href="{{ url_for('login') }}" class="btn-floating pulse"><i class="material-icons">account_box</i></a>
-            <a href="{{url_for('register') }}" class="btn-floating  pulse"><i class="material-icons">person_add</i></a>
+            <a href="{{ url_for('login') }}" class="btn-floating pulse"><i class="fas fa-sign-in-alt"></i></a>
+            <a href="{{url_for('register') }}" class="btn-floating pulse"><i class="fas fa-user-plus"></i></a>
         </div>
+
         <div class="content">
-            <h1 class="center-align ">Whats Your Taste?</h1>
+                <div class="container">
+                        <h2 class="center-align"><i class="fas fa-wine-bottle"></i>FIND YOUR WINE</h2>
+                    </div>
+            <h3 class="center-align ">Whats Your Taste?</h3>
         <div class="row">
-            <form method="POST" action="/" class=" mtForms col s12">
-                {{ wtf.quick_form(form)}}
-            </form>
+            <form  action="/" method="POST" class="center=align">
+                    <div class="row">
+                      <div class="input-field col s3">
+                        <i class="material-icons prefix">create</i>
+                        <input id="wineName" type="text" name ='wineName'>
+                        <label for="icon_prefix">Your Wine Name...</label>
+                      </div>
+                      <div class="input-field col s3">
+                        <i class="material-icons prefix">attach_money</i>
+                        <input id="price" type="text" name="price">
+                        <label for="price">Your Price...</label>
+                      </div>
+                      <div class="input-field col s3">
+                          <i class="material-icons prefix">restaurant_menu</i>
+                          <input id="food" name ='food' type="text">
+                          <label for="food">You Food...</label>
+                      </div>
+
+                      <div class="col s6">
+                          <button class="btn waves-effect waves-light search" type="submit" name="action"><i class="material-icons">search</i> Search</button>
+                      </div>
+                    </div>
+                  </form>
         </div>
         </div>
     </div>
 </div>
-{% endblock %}
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <!-- Materialize JS CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
+

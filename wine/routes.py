@@ -67,14 +67,14 @@ class searchDashBoard(FlaskForm):
 
 @app.route('/',methods=['GET','POST'])
 def index():
-    form=wineForm(request.form)
-    if request.method == 'POST' and form.validate_on_submit():
-        user_input = form.name.data
-        user_price = form.price.data
-        user_food=form.food.data
+    # form=wineForm(request.form)
+    if request.method == 'POST':
+        user_input = request.form['wineName']
+        user_price = request.form['price']
+        user_food=request.form['food']
         wineID=a.getIdByName(user_input)
         print(wineID)
-        similar=a.getClosestMatch(wineID,user_food)
+        similar=a.getClosestMatch(wineID,[user_food])
         if not similar:
             flash(' Wine Not found ')
         else:
@@ -92,8 +92,7 @@ def index():
                     count += 1
             print(newList)
             return render_template('rec.html',newList=newList,user_input=user_input)
-
-    return render_template('index.html',form=form)
+    return render_template('index.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -133,32 +132,34 @@ def dashboard():
 @login_required
 def process():
     if current_user.is_authenticated:
-            user_input=request.form['wineName']
-            user_price = request.form['price']
-            user_price=float(user_price)
-            # user_food = request.form['userFood']
-            # print(user_food)
-            wineID=a.getIdByName(user_input)
-            print(wineID)
-            similar=a.getClosestMatch(wineID)
-            if not similar:
-                flash(' Wine Not found ')
-            else:
-                newList=[]
-                count = 0
-                for id in similar:
-                    info=a.getWineInfo(id)
-                    if count > 8:
-                        break
-                    if info['price']<=float(user_price):
-                        r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
-                        pic_url = r['wine_page_information']['vintage']['image']['location']
-                        info['url']="https:"+str(pic_url)
-                        newList.append(info)
-                        count += 1
-                print(jsonify(newList))
-                return jsonify(newList)
-            return jsonify({'error':'missing Data'})
+        if request.method =='POST':
+                user_input=request.form['wineName']
+                user_price = request.form['price']
+                user_price=float(user_price)
+                user_food = request.form['food']
+                user_food=[user_food]
+                print(user_food)
+                wineID=a.getIdByName(user_input)
+                print('food',user_food)
+                similar=a.getClosestMatch(wineID,user_food)
+                if not similar:
+                    flash(' Wine Not found ')
+                else:
+                    newList=[]
+                    count = 0
+                    for id in similar:
+                        info=a.getWineInfo(id)
+                        if count > 8:
+                            break
+                        if info['price']<=float(user_price):
+                            r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
+                            pic_url = r['wine_page_information']['vintage']['image']['location']
+                            info['url']="https:"+str(pic_url)
+                            newList.append(info)
+                            count += 1
+                    print(jsonify(newList))
+                    return jsonify(newList)
+        return jsonify({'error':'missing Data'})
 
 @app.route('/save',methods=['GET','POST'])
 @login_required
