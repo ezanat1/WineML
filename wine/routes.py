@@ -30,9 +30,11 @@ if not os.path.exists(database_path):
 a = wineClassifier()
 
 class wineForm(FlaskForm):
-    name=StringField('Enter a Wine You Like',validators=[DataRequired()])
+    name=StringField('Enter a Vineyard or Varietal',validators=[DataRequired()])
     price=StringField('Enter the Max Price of Output Wines',validators=[DataRequired()])
-    food=StringField('Food Paring',validators=[DataRequired()])
+    food=StringField('Choose Food Pairing From: Game, Fish, Vegetarian, '+ 
+    'Pasta, Poultry, Pork, Spicy, Seafood, Shellfish, Veal, Cheese, '+
+    'Lamb, Mushrooms, Beef, Cured Meat, Desserts',validators=[DataRequired()])
     submit=SubmitField()
 
 @login_manager.user_loader
@@ -73,7 +75,6 @@ def index():
         user_price = form.price.data
         user_food=form.food.data
         wineID=a.getIdByName(user_input)
-        print(wineID)
         similar=a.getClosestMatch(wineID,[user_food])
         if not similar:
             flash(' Wine Not found ')
@@ -91,7 +92,6 @@ def index():
                     info['pairing']= getPairings(info['variance'])
                     newList.append(info)
                     count += 1
-            print(newList)
             return render_template('rec.html',newList=newList,user_input=user_input)
 
     return render_template('index.html',form=form)
@@ -170,7 +170,6 @@ def getPairings(varietal):
         if vector[index] == 1:
             food_list.append(ref[index])
     food_list = ", ".join(food_list)
-    print(food_list)
     return food_list
 
 @app.errorhandler(404)
@@ -215,9 +214,7 @@ def process():
             user_price = request.form['price']
             user_price=float(user_price)
             # user_food = request.form['userFood']
-            # print(user_food)
             wineID=a.getIdByName(user_input)
-            print(wineID)
             similar=a.getClosestMatch(wineID)
             if not similar:
                 flash(' Wine Not found ')
@@ -232,9 +229,10 @@ def process():
                         r=requests.get('https://www.vivino.com/api/wines/'+str(id)+'/wine_page_information').json()
                         pic_url = r['wine_page_information']['vintage']['image']['location']
                         info['url']="https:"+str(pic_url)
+                        info['pairing']= getPairings(info['variance'])
                         newList.append(info)
                         count += 1
-                print(jsonify(newList))
+
                 return jsonify(newList)
             return jsonify({'error':'missing Data'})
 
@@ -242,9 +240,7 @@ def process():
 @login_required
 def save():
     user_id=current_user.get_id()
-    print('the user id is ',user_id)
     wine_id=request.form['id']
-    print(wine_id)
     preference=UserChoice(user_id=user_id,wine_id=wine_id)
     db.session.add(preference)
     db.session.commit()
@@ -263,6 +259,7 @@ def myWine():
         r=requests.get('https://www.vivino.com/api/wines/'+str(w)+'/wine_page_information').json()
         pic_url = r['wine_page_information']['vintage']['image']['location']
         info['url']="https:"+str(pic_url)
+        info['pairing']= getPairings(info['variance'])
         newList.append(info)
     return render_template('myWines.html',newList=newList)
 
@@ -270,12 +267,9 @@ def myWine():
 @login_required
 def deleteWine():
         user_id=current_user.get_id()
-        print(user_id)
         wine_id=request.form['id']
-        print(wine_id)
         # wine=UserChoice(user_id=user_id,wine_id=wine_id)
         wine=UserChoice.query.filter_by(wine_id=wine_id).first()
-        print(wine)
         db.session.delete(wine)
         db.session.commit()
         return jsonify({'result':wine_id})

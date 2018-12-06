@@ -65,7 +65,6 @@ class wineClassifier:
                 if Wine.query.get(wine_id):
                     continue
                 name = row[1]
-                # print(row)
                 avg_rating = float(row[2])
                 price = float(row[3])
                 variance = row[4]
@@ -73,7 +72,6 @@ class wineClassifier:
                 region = row[6]
                 comments_detailed = row[7:]
                 comments = comments_detailed[2::3]
-                # print(comments)
                 comment_score = 0
                 comment_count = 0
                 # parse each comment
@@ -136,7 +134,7 @@ class wineClassifier:
 
         a_array = numpy.array((wine_a.rating,wine_a.sentiment, 0, 0, 0))
         b_array = numpy.array((wine_b.rating,wine_b.sentiment,d_variance,d_vineyard,d_region))
-        weights = numpy.array((0.2, 10, 0.3, 0.1, 0.2))
+        weights = numpy.array((0.2, 3, 0.4, 0.1, 0.2))
         return numpy.linalg.norm(weights*(a_array - b_array))
 
     def getIdByName(self,wineName):
@@ -153,16 +151,16 @@ class wineClassifier:
                 score = new_score
                 wineID = row.id
                 matchName = row.name
-        print("User wine input",wineName,"Best match is",matchName)
+        # print("User wine input",wineName,"Best match is",matchName)
         return wineID
 
-    def getWineByPairing(self, wineID):
-        print(pairings.wines)
+    # def getWineByPairing(self, wineID):
+    #     print(pairings.wines)
 
-    """
-        This method takes in a probable food name, first finds the food that matches the input
-         then returns the type of wines that matches the food 
-    """
+    # """
+    #     This method takes in a probable food name, first finds the food that matches the input
+    #      then returns the type of wines that matches the food 
+    # """
     def getPairingByName(self,food_name):
 
         score = 0
@@ -183,7 +181,7 @@ class wineClassifier:
                     score = new_score
                     matchName = ref_name
                     index = pairings.ref.index(matchName)
-        print("User food input", food_name, "Best match is", matchName)
+        # print("User food input", food_name, "Best match is", matchName)
         # name found, find pairing wines
 
         match_wines = []
