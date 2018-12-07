@@ -40,10 +40,10 @@ cd to main directory where run.py is
 
 python run.py
 
-
-
-
- 
- 
-
-
+## Screenshots:
+![Home page](https://github.com/SJSU272LabF18/Project-Team-9/blob/master/demo/1.png)
+![Wine list](https://github.com/SJSU272LabF18/Project-Team-9/blob/master/demo/2.png)
+![Log in](https://github.com/SJSU272LabF18/Project-Team-9/blob/master/demo/3.png)
+![Register](https://github.com/SJSU272LabF18/Project-Team-9/blob/master/demo/4.png)
+![Dashboard](https://github.com/SJSU272LabF18/Project-Team-9/blob/master/demo/5.png)
+![Selection](https://github.com/SJSU272LabF18/Project-Team-9/blob/master/demo/6.png)
