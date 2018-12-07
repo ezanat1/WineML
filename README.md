@@ -12,43 +12,36 @@ Proposed methodology/ resources, etc: We’ll be using sentiment analysis to det
 Data set: fetched from https://www.vivino.com/
 
 
-
-# Run code
-
-Create virtual environment 
-
-python3 -m venv venv
-
-After init virtual environment --> activate virtual environment
-
-source venv/bin/activate
-
-python3 run.py
-
-
 ## Install dependencies
 
-pip3 install flask
-
-pip3 install Flask-Materialize
-
-pip3 install flask_wtf
-
-pip3 install flask_sqlalchemy
-
-
-## Install dependencies in wine blog
 pip install flask
 
-pip install flask_sqlalchemy
+pip install Flask-Materialize
 
 pip install flask_wtf
 
-pip install bcrypt
+pip install flask_sqlalchemy
 
 pip install flask_login
 
 pip install Pillow
+
+pip install bcrypt
+
+pip install fuzzywuzzy
+
+pip install numpy
+
+pip install pickle
+
+## Run code
+
+cd to main directory where run.py is
+
+python run.py
+
+
+
 
  
  
